@@ -55,7 +55,7 @@ Running the Application
 
 Install dependencies using npm install
 Start the server using npm start
-Open the application in a browser at http://localhost:3000
+Open the application in a browser at ai-study-assistant-sahar-hxfecwgjgqhjg0cf.canadacentral-01.azurewebsites.net
 
 What This Project Demonstrates
 
