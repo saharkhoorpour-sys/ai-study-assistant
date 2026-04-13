@@ -126,3 +126,9 @@ body {
 .site-footer {
   color: var(--ink-muted);
 }
+.active-mode {
+  background: linear-gradient(135deg, #ff69b4, #ff85c1);
+  color: #fff;
+  border-color: #ff69b4;
+  box-shadow: 0 4px 12px rgba(255, 105, 180, 0.25);
+}
