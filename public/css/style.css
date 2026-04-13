@@ -288,26 +288,3 @@ body::before {
 .hidden {
   display: none !important;
 }
-/* ================================================================
-   ✨ TITLE GLOW ANIMATION
-   ================================================================ */
-
-.title-accent {
-  color: var(--accent);
-  text-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
-  animation: glowPulse 3s ease-in-out infinite;
-}
-
-@keyframes glowPulse {
-  0% {
-    text-shadow: 0 0 12px rgba(255, 105, 180, 0.4);
-  }
-  50% {
-    text-shadow:
-      0 0 25px rgba(255, 105, 180, 0.9),
-      0 0 40px rgba(255, 105, 180, 0.6);
-  }
-  100% {
-    text-shadow: 0 0 12px rgba(255, 105, 180, 0.4);
-  }
-}
