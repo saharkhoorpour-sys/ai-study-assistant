@@ -1,208 +1,181 @@
 // ================================================================
 // script.js — Frontend JavaScript for the AI Study Assistant
-//
-// This file handles all user interactions on the page:
-//   1. Reads what the user typed
-//   2. Sends it to the backend using fetch()
-//   3. Shows a loading animation while waiting
-//   4. Displays the AI's answer (or an error message)
 // ================================================================
 
-
-// ----------------------------------------------------------------
-// STEP 1: Get references to the HTML elements we need to work with
-// ----------------------------------------------------------------
-
-// The big text box where the user types their question
+// Main elements
 const questionInput = document.getElementById("questionInput");
-
-// The submit button
 const submitBtn = document.getElementById("submitBtn");
-
-// The spinning dots + "thinking..." message
 const loadingIndicator = document.getElementById("loadingIndicator");
-
-// The card that holds the AI's response
 const responseCard = document.getElementById("responseCard");
-
-// The element inside the card where the answer text goes
 const responseText = document.getElementById("responseText");
-
-// The error message element (shown on bad input or server error)
 const errorMessage = document.getElementById("errorMessage");
-
-// The character counter below the textarea
 const charCount = document.getElementById("charCount");
-
-// The "Ask another question" button inside the response card
 const resetBtn = document.getElementById("resetBtn");
 
+// New elements
+const examplePrompts = document.querySelectorAll(".example-prompt");
+const modeButtons = document.querySelectorAll(".mode-btn");
+const loadingText = document.querySelector(".loading-text");
 
-// ----------------------------------------------------------------
-// STEP 2: Update the character count as the user types
-// ----------------------------------------------------------------
+let selectedMode = "Explain";
 
+// ---------------------------------------------------------------
+// Character count
+// ---------------------------------------------------------------
 questionInput.addEventListener("input", () => {
-  // Count how many characters have been typed
-  const count = questionInput.value.length;
-  charCount.textContent = count;
-
-  // If there's an error showing, hide it as soon as the user starts typing again
+  charCount.textContent = questionInput.value.length;
   hideError();
 });
 
+// ---------------------------------------------------------------
+// Example prompt buttons
+// ---------------------------------------------------------------
+examplePrompts.forEach((prompt) => {
+  prompt.addEventListener("click", () => {
+    questionInput.value = prompt.textContent;
+    charCount.textContent = questionInput.value.length;
+    hideError();
+    questionInput.focus();
+  });
+});
 
-// ----------------------------------------------------------------
-// STEP 3: Handle the submit button click
-// ----------------------------------------------------------------
+// ---------------------------------------------------------------
+// Mode buttons
+// ---------------------------------------------------------------
+modeButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    modeButtons.forEach((btn) => btn.classList.remove("active-mode"));
+    button.classList.add("active-mode");
+    selectedMode = button.textContent.trim();
 
-submitBtn.addEventListener("click", async () => {
-  // Read the question from the textarea, removing extra whitespace
-  const question = questionInput.value.trim();
-
-  // --- Validate: don't send an empty question ---
-  if (!question) {
-    showError("Please type a question or paste some notes before submitting!");
-    questionInput.focus(); // Move cursor back to the textarea
-    return; // Stop here — don't proceed
-  }
-
-  // --- All good! Start the request process ---
-  showLoading(true);   // Show the spinning dots
-  hideError();         // Make sure no old error is visible
-  hideResponse();      // Hide any old response
-
-  try {
-    // -------------------------------------------------------
-    // STEP 4: Send the question to the backend using fetch()
-    //
-    // fetch() makes an HTTP request to our Express server.
-    // We use POST because we're sending data (the question).
-    // The backend is at /api/ask (defined in server.js).
-    // -------------------------------------------------------
-    const response = await fetch("/api/ask", {
-      method: "POST",                        // Use POST to send data
-      headers: {
-        "Content-Type": "application/json",  // Tell the server we're sending JSON
-      },
-      body: JSON.stringify({ question }),    // Convert our data to a JSON string
-    });
-
-    // -------------------------------------------------------
-    // STEP 5: Parse the response from the server
-    //
-    // The server sends back JSON. We convert it to a JS object.
-    // -------------------------------------------------------
-    const data = await response.json();
-
-    // -------------------------------------------------------
-    // STEP 6: Check if the server reported an error
-    //
-    // Even if the request "succeeded" (HTTP 200), the server
-    // might send back an { error: "..." } object. We check both.
-    // -------------------------------------------------------
-    if (!response.ok || data.error) {
-      // Show the server's error message, or a generic fallback
-      const msg = data.error || "Something went wrong. Please try again.";
-      showError(msg);
-      return; // Don't display a response card
+    if (selectedMode === "Explain") {
+      questionInput.placeholder =
+        "e.g. Explain photosynthesis in simple terms";
+    } else if (selectedMode === "Summarize") {
+      questionInput.placeholder =
+        "Paste your notes or paragraph here for a summary";
+    } else if (selectedMode === "Quiz Me") {
+      questionInput.placeholder =
+        "e.g. Quiz me on the French Revolution";
     }
 
-    // -------------------------------------------------------
-    // STEP 7: Display the AI's answer on the page
-    // -------------------------------------------------------
-    displayResponse(data.answer);
+    questionInput.focus();
+  });
+});
 
+// Set default active mode
+modeButtons.forEach((btn) => {
+  if (btn.textContent.trim() === "Explain") {
+    btn.classList.add("active-mode");
+  }
+});
+
+// ---------------------------------------------------------------
+// Submit button
+// ---------------------------------------------------------------
+submitBtn.addEventListener("click", async () => {
+  const rawQuestion = questionInput.value.trim();
+
+  if (!rawQuestion) {
+    showError("Please type a question or paste some notes before submitting.");
+    questionInput.focus();
+    return;
+  }
+
+  let question = rawQuestion;
+
+  if (selectedMode === "Explain") {
+    question = `Explain this clearly and simply: ${rawQuestion}`;
+  } else if (selectedMode === "Summarize") {
+    question = `Summarize this in a clear and simple way: ${rawQuestion}`;
+  } else if (selectedMode === "Quiz Me") {
+    question = `Create a short quiz based on this topic: ${rawQuestion}`;
+  }
+
+  showLoading(true);
+  hideError();
+  hideResponse();
+
+  try {
+    const response = await fetch("/api/ask", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ question }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.error) {
+      const msg = data.error || "Something went wrong. Please try again.";
+      showError(msg);
+      return;
+    }
+
+    displayResponse(data.answer);
   } catch (networkError) {
-    // This runs if the fetch itself fails — e.g. the server is not running
     console.error("Network error:", networkError);
-    showError(
-      "Could not reach the server. Make sure the backend is running with 'npm start'."
-    );
+    showError("Could not reach the server. Please try again.");
   } finally {
-    // Always hide the loading spinner when done, whether success or error
     showLoading(false);
   }
 });
 
-
-// ----------------------------------------------------------------
-// STEP 8: Handle the "Ask another question" button
-// ----------------------------------------------------------------
-
+// ---------------------------------------------------------------
+// Reset button
+// ---------------------------------------------------------------
 resetBtn.addEventListener("click", () => {
-  // Clear the textarea so the user can start fresh
   questionInput.value = "";
   charCount.textContent = "0";
-
-  // Hide the response card
   hideResponse();
-
-  // Move the cursor to the input box
+  hideError();
   questionInput.focus();
 });
 
-
 // ================================================================
-// HELPER FUNCTIONS
-// These keep our main code clean and readable.
+// Helper functions
 // ================================================================
 
-/**
- * showError(message)
- * Shows a red error message box with the given text.
- */
 function showError(message) {
   errorMessage.textContent = message;
-  errorMessage.classList.add("visible");   // CSS .visible sets display: block
+  errorMessage.classList.add("visible");
 }
 
-/**
- * hideError()
- * Hides the error message box.
- */
 function hideError() {
   errorMessage.textContent = "";
   errorMessage.classList.remove("visible");
 }
 
-/**
- * showLoading(isLoading)
- * Shows or hides the loading indicator and disables the submit button.
- * Pass true to show, false to hide.
- */
 function showLoading(isLoading) {
   if (isLoading) {
-    loadingIndicator.classList.remove("hidden");  // Show the dots
-    submitBtn.disabled = true;                     // Disable the button
-    submitBtn.querySelector(".btn-text").textContent = "Thinking…";
+    loadingIndicator.classList.remove("hidden");
+    submitBtn.disabled = true;
+    submitBtn.querySelector(".btn-text").textContent = "Thinking...";
+
+    if (selectedMode === "Explain") {
+      loadingText.textContent = "Breaking this topic into simple steps...";
+    } else if (selectedMode === "Summarize") {
+      loadingText.textContent = "Reading through your notes...";
+    } else if (selectedMode === "Quiz Me") {
+      loadingText.textContent = "Preparing your quiz...";
+    } else {
+      loadingText.textContent = "Your AI tutor is thinking...";
+    }
   } else {
-    loadingIndicator.classList.add("hidden");      // Hide the dots
-    submitBtn.disabled = false;                    // Re-enable the button
+    loadingIndicator.classList.add("hidden");
+    submitBtn.disabled = false;
     submitBtn.querySelector(".btn-text").textContent = "Ask the AI Tutor";
+    loadingText.textContent = "Your AI tutor is thinking...";
   }
 }
 
-/**
- * displayResponse(answer)
- * Takes the AI's answer string and renders it inside the response card.
- */
 function displayResponse(answer) {
-  // Put the answer text inside the response div
-  // We use textContent (not innerHTML) to keep it safe from any HTML injection.
   responseText.textContent = answer;
-
-  // Show the response card (remove the "hidden" CSS class)
   responseCard.classList.remove("hidden");
-
-  // Smoothly scroll down so the user can see the answer
   responseCard.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/**
- * hideResponse()
- * Hides the response card (so we can show a fresh one next time).
- */
 function hideResponse() {
   responseCard.classList.add("hidden");
   responseText.textContent = "";
