@@ -1,5 +1,5 @@
 /* ================================================================
-   AuraStudy — Final Polished Theme ✨
+   AuraStudy — FINAL POLISHED VERSION 💖✨
    ================================================================ */
 
 :root {
@@ -14,9 +14,9 @@
   --yellow-soft: #fff4b8;
 
   --border: #f2d8e5;
-  --shadow: 0 10px 30px rgba(255, 105, 180, 0.12);
+  --shadow: 0 12px 40px rgba(255, 105, 180, 0.15);
 
-  --radius-lg: 20px;
+  --radius-lg: 22px;
   --radius-md: 14px;
   --radius-sm: 10px;
 
@@ -36,7 +36,7 @@ html {
 }
 
 /* ================================================================
-   🌸 AURA BACKGROUND (ANIMATED)
+   🌸 STRONG AURA BACKGROUND (ANIMATED)
    ================================================================ */
 
 body {
@@ -52,16 +52,18 @@ body {
 body::before {
   content: "";
   position: fixed;
-  inset: 0;
+  inset: -15%;
   z-index: -1;
 
   background:
-    radial-gradient(circle at 40% 20%, rgba(255, 105, 180, 0.25), transparent 40%),
-    radial-gradient(circle at 70% 60%, rgba(255, 244, 184, 0.25), transparent 45%),
-    radial-gradient(circle at 20% 80%, rgba(255, 182, 193, 0.2), transparent 50%);
+    radial-gradient(circle at 50% 15%, rgba(255, 105, 180, 0.5), transparent 30%),
+    radial-gradient(circle at 80% 60%, rgba(255, 244, 184, 0.45), transparent 32%),
+    radial-gradient(circle at 20% 80%, rgba(255, 182, 193, 0.45), transparent 35%),
+    radial-gradient(circle at 50% 50%, rgba(255, 214, 234, 0.3), transparent 45%);
 
-  filter: blur(70px);
-  animation: auraMove 14s ease-in-out infinite alternate;
+  filter: blur(110px);
+  animation: auraMove 18s ease-in-out infinite alternate;
+  opacity: 1;
 }
 
 @keyframes auraMove {
@@ -69,10 +71,10 @@ body::before {
     transform: scale(1) translate(0px, 0px);
   }
   50% {
-    transform: scale(1.05) translate(30px, -20px);
+    transform: scale(1.08) translate(40px, -25px);
   }
   100% {
-    transform: scale(1.1) translate(-20px, 25px);
+    transform: scale(1.12) translate(-30px, 30px);
   }
 }
 
@@ -81,16 +83,11 @@ body::before {
    ================================================================ */
 
 .site-header {
-  position: relative;
   padding: 3.5rem 1.25rem 2rem;
   text-align: center;
 }
 
 .header-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
   height: 6px;
   background: linear-gradient(90deg, var(--accent), var(--yellow-soft), var(--accent));
 }
@@ -107,22 +104,20 @@ body::before {
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--accent-dark);
   background: rgba(255, 105, 180, 0.1);
-  border: 1px solid rgba(255, 105, 180, 0.22);
 }
 
 .site-title {
   margin: 0 0 0.75rem;
   font-family: var(--font-display);
-  font-size: clamp(2.8rem, 6vw, 4.4rem);
-  letter-spacing: -0.03em;
+  font-size: clamp(3rem, 6vw, 4.6rem);
 }
 
 .title-accent {
   color: var(--accent);
+  text-shadow: 0 0 20px rgba(255, 105, 180, 0.4);
 }
 
 .site-subtitle {
@@ -142,15 +137,15 @@ body::before {
 
 /* ✨ GLASS CARD */
 .card {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
 }
 
 /* ================================================================
-   INPUT
+   INPUT SECTION
    ================================================================ */
 
 .input-card {
@@ -180,16 +175,17 @@ body::before {
 }
 
 .mode-btn {
-  padding: 0.6rem 1.1rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 999px;
   border: 1.5px solid var(--accent);
   background: white;
   color: var(--accent-dark);
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.25s;
 }
 
 .mode-btn:hover {
+  transform: translateY(-2px);
   background: var(--accent-soft);
 }
 
@@ -208,7 +204,7 @@ body::before {
 
 .question-textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(255, 105, 180, 0.13);
+  box-shadow: 0 0 0 4px rgba(255, 105, 180, 0.15);
 }
 
 /* EXAMPLES */
@@ -216,20 +212,21 @@ body::before {
   margin-top: 1rem;
   padding: 1rem;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, rgba(255, 244, 184, 0.5), rgba(255, 214, 234, 0.4));
+  background: linear-gradient(135deg, rgba(255, 244, 184, 0.6), rgba(255, 214, 234, 0.5));
 }
 
 .example-prompt {
   display: block;
   margin-bottom: 0.5rem;
-  padding: 0.7rem;
+  padding: 0.75rem;
   border-radius: var(--radius-sm);
   border: 1px solid rgba(255, 105, 180, 0.2);
   cursor: pointer;
+  transition: 0.2s;
 }
 
 .example-prompt:hover {
-  transform: translateX(5px);
+  transform: translateX(6px);
   color: var(--accent-dark);
 }
 
@@ -243,7 +240,12 @@ body::before {
   background: linear-gradient(135deg, var(--accent), #ff8ac6);
   color: white;
   cursor: pointer;
-  box-shadow: 0 8px 18px rgba(255, 105, 180, 0.24);
+  box-shadow: 0 10px 25px rgba(255, 105, 180, 0.3);
+  transition: 0.25s;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
 }
 
 /* ================================================================
@@ -259,7 +261,7 @@ body::before {
 .response-text {
   padding: 1rem;
   border-radius: var(--radius-md);
-  background: linear-gradient(135deg, rgba(255, 244, 184, 0.4), rgba(255, 214, 234, 0.3));
+  background: linear-gradient(135deg, rgba(255, 244, 184, 0.5), rgba(255, 214, 234, 0.4));
 }
 
 /* ================================================================
