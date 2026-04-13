@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   />
 </head>
@@ -20,15 +20,15 @@
     <div class="header-bar"></div>
 
     <div class="header-content">
-      <span class="header-label">Study support made simple</span>
+      <span class="header-label">A calmer way to study</span>
 
       <h1 class="site-title">
         Aura<span class="title-accent">Study</span>
       </h1>
 
       <p class="site-subtitle">
-        A soft, supportive space for explaining topics, summarizing notes,
-        and turning studying into something easier.
+        Your supportive AI study companion for explaining concepts,
+        summarizing notes, and helping you stay engaged while you learn.
       </p>
     </div>
   </header>
@@ -37,8 +37,10 @@
 
     <section class="card input-card">
       <div class="welcome-block">
-        <h2 class="welcome-title">Your AI Study Companion ✨</h2>
-        <p class="welcome-text">Let’s make this topic simple together.</p>
+        <h2 class="welcome-title">Study with more clarity ✨</h2>
+        <p class="welcome-text">
+          Choose how you want help, type in your topic, and let AuraStudy guide you through it.
+        </p>
       </div>
 
       <div class="mode-selector">
@@ -48,17 +50,17 @@
       </div>
 
       <label for="questionInput" class="input-label">
-        What are you studying today?
+        What are you working on today?
       </label>
 
       <textarea
         id="questionInput"
         class="question-textarea"
-        placeholder="e.g. Explain photosynthesis in simple terms
+        placeholder="For example: Explain photosynthesis in simple terms
 
-or paste your notes here for a summary
+Or paste your notes here for a summary
 
-or ask Quiz me on the French Revolution"
+Or ask: Quiz me on the French Revolution"
         rows="6"
       ></textarea>
 
@@ -91,20 +93,20 @@ or ask Quiz me on the French Revolution"
     <section id="responseCard" class="card response-card hidden">
       <div class="response-header">
         <span class="response-badge">AuraStudy</span>
-        <h2 class="response-title">Here’s your answer</h2>
+        <h2 class="response-title">Here’s your response</h2>
       </div>
 
       <div id="responseText" class="response-text"></div>
 
       <button id="resetBtn" class="reset-btn" type="button">
-        Ask another question
+        Start a new question
       </button>
     </section>
 
   </main>
 
   <footer class="site-footer">
-    <p>AuraStudy — built for curious minds</p>
+    <p>AuraStudy — designed to make studying feel clearer, calmer, and more approachable.</p>
   </footer>
 
   <script src="js/script.js"></script>
